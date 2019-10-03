@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello World{% endblock %}
+
+{% block body %}
+<div id="app">
+    <div v-if="loading" style="text-align: center">
+        <h3>Loading data</h3>
+        <p>This might take a while!</p>
+    </div>
+
+    <table class="table" v-else>
+        <thead>
+        <tr>
+            <th>Path</th>
+            <th>Source size / Backup size</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tr v-for="file in files" v-key="file.path" v-bind:class="{ 'bg-danger': file.errors.length > 0,  'bg-success': file.errors.length == 0 }">
+            <td v-text="file.path"></td>
+            <td>
+                <span v-text="file.sourceSize"></span>
+                /
+                <span v-text="file.targetSize"></span>
+            </td>
+            <td v-text="file.sourceTimestamp"></td>
+            <td v-text="file.errors.join(', ')"></td>
+        </tr>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                files: [],
+                loading: true,
+            },
+            created: function() {
+                console.log('created');
+                this.loading = true;
+                if (this.files.length !== 0) {
+                    console.log('already loaded');
+                    this.loading = false;
+                    return true;
+                }
+
+                let that = this;
+                fetch('/files')
+                    .then(function(response) {
+                        console.log('response', response);
+                        return response.json()
+                    })
+                    .then(function(files) {
+                        that.files = files;
+                        console.log('files', that.files);
+                    })
+                    .then(function() {
+                        that.loading = false;
+                    })
+                    .then(function() {
+                        return true;
+                    });
+            },
+        })
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% endblock %}

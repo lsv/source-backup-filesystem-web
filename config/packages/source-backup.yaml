@@ -1,0 +1,5 @@
+services:
+    Lsv\BackupCompareFilesystems\CompareFilesystems:
+        arguments:
+            - '@bu_source_fs'
+            - '@bu_target_fs'

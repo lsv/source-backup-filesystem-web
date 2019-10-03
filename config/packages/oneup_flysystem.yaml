@@ -1,0 +1,52 @@
+parameters:
+    s3_source_endpoint: '%env(string:S3_SOURCE_ENDPOINT)%'
+    s3_source_region: '%env(string:S3_SOURCE_REGION)%'
+    s3_source_key: '%env(string:S3_SOURCE_KEY)%'
+    s3_source_secret: '%env(string:S3_SOURCE_SECRET)%'
+    s3_source_bucket: '%env(string:S3_SOURCE_BUCKET)%'
+    s3_target_region: '%env(string:S3_TARGET_REGION)%'
+    s3_target_key: '%env(string:S3_TARGET_KEY)%'
+    s3_target_secret: '%env(string:S3_TARGET_SECRET)%'
+    s3_target_bucket: '%env(string:S3_TARGET_BUCKET)%'
+
+oneup_flysystem:
+    adapters:
+        source_adapter:
+            awss3v3:
+                client: source.s3_client
+                bucket: '%s3_source_bucket%'
+
+        target_adapter:
+            awss3v3:
+                client: target.s3_client
+                bucket: '%s3_target_bucket%'
+
+    filesystems:
+        source_filesystem:
+            adapter: source_adapter
+            alias: bu_source_fs
+        target_filesystem:
+            adapter: target_adapter
+            alias: bu_target_fs
+
+services:
+    source.s3_client:
+        class: Aws\S3\S3Client
+        arguments:
+            -
+                endpoint: '%s3_source_endpoint%'
+                version: 'latest'
+                region: '%s3_source_region%'
+                credentials:
+                    key: '%s3_source_key%'
+                    secret: '%s3_source_secret%'
+
+    target.s3_client:
+        class: Aws\S3\S3Client
+        arguments:
+            -
+                version: 'latest'
+                region: '%s3_target_region%'
+                credentials:
+                    key: '%s3_target_key%'
+                    secret: '%s3_target_secret%'
