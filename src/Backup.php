@@ -59,7 +59,7 @@ class Backup
         $output->writeln('Handling file: "'.$filedata['path'].'"');
         try {
             $method = 'putStream';
-            if (!$this->input->getOption('no-overwrite')) {
+            if ($this->input->getOption('no-overwrite')) {
                 $method = 'writeStream';
             }
 
