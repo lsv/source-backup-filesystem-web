@@ -20,6 +20,9 @@
     "doctrine/lexer": {
         "version": "1.1.0"
     },
+    "egulias/email-validator": {
+        "version": "2.1.11"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -34,6 +37,9 @@
     },
     "league/flysystem-aws-s3-v3": {
         "version": "1.0.23"
+    },
+    "lorenzo/pinky": {
+        "version": "1.0.5"
     },
     "lsv/source-backup-filesystem-compare": {
         "version": "dev-master"
@@ -92,6 +98,9 @@
             "bin/console",
             "config/bootstrap.php"
         ]
+    },
+    "symfony/css-selector": {
+        "version": "v4.3.4"
     },
     "symfony/debug": {
         "version": "v4.3.4"
@@ -153,6 +162,18 @@
     },
     "symfony/inflector": {
         "version": "v4.3.4"
+    },
+    "symfony/mailer": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "6e5921f710bec05533f664e0b9a3d838545edd82"
+        },
+        "files": [
+            "config/packages/mailer.yaml"
+        ]
     },
     "symfony/maker-bundle": {
         "version": "1.0",
@@ -251,6 +272,27 @@
     },
     "symfony/yaml": {
         "version": "v4.3.4"
+    },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.1"
+    },
+    "twig/cssinliner-extension": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "3460ba58f2609c9f1a38c6e9f2a416ff911f0861"
+        }
+    },
+    "twig/inky-extension": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "98aa25792ca5b18aebbac6644a150ac90867408d"
+        }
     },
     "twig/twig": {
         "version": "v2.11.3"

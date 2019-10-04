@@ -1,0 +1,54 @@
+{% filter inky %}
+{% apply inline_css(source('foundation-emails.css')) %}
+<container>
+    <row>
+        <columns>
+            <h4>Overview</h4>
+
+            <table class="callout primary" style="width: 100%">
+                <tr class="callout-inner alert">
+                    <th>Status</th>
+                    <th>Number of files</th>
+                </tr>
+                {% for error, files in errorfiles %}
+                    <tr class="callout-inner alert">
+                        <td>{{ error }}</td>
+                        <td>{{ files|length }}</td>
+                    </tr>
+                {% endfor %}
+                <tr class="callout-inner alert">
+                    <td>OK</td>
+                    <td>{{ okfiles|length }}</td>
+                </tr>
+            </table>
+
+            <h4>Files</h4>
+            <table style="width: 100%">
+                <tr>
+                    <th>Filepath</th>
+                    <th>Error</th>
+                    <th>Status</th>
+                </tr>
+                {% for error,files in errorfiles %}
+                    {% for file in files %}
+                        <tr>
+                            <td>{{ file.path }}</td>
+                            <td>{{ error }}</td>
+                            <td>Error</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                {% for file in okfiles %}
+                    <tr>
+                        <td>{{ file.path }}</td>
+                        <td>-</td>
+                        <td>OK</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </columns>
+    </row>
+</container>
+{% endapply %}
+{% endfilter %}

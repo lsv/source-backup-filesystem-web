@@ -23,5 +23,8 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    App\Command\CompareMailCommand:
+        $toEmail: '%env(string:COMPARE_MAILADDRESS)%'
+        $toName: '%env(string:COMPARE_MAILNAME)%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
