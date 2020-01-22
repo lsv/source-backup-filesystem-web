@@ -21,14 +21,19 @@ class DatabaseBackup
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var string
+     */
+    private $temporaryDirectory;
 
-    public function __construct(FilesystemInterface $targetFs, EntityManagerInterface $entityManager)
+    public function __construct(FilesystemInterface $targetFs, EntityManagerInterface $entityManager, string $temporaryDirectory)
     {
         $this->targetFs = $targetFs;
         $this->entityManager = $entityManager;
+        $this->temporaryDirectory = $temporaryDirectory;
     }
 
-    public function execute(OutputInterface $output): void
+    public function getProcess(string $path, string $filename): Process
     {
         $params = $this->entityManager->getConnection()->getParams();
         $host = $params['host'];
@@ -36,11 +41,10 @@ class DatabaseBackup
         $password = $params['password'];
         $name = $params['dbname'];
         $port = $params['port'];
-        $filename = time().'_dump.sql';
-        $file = sys_get_temp_dir().'/'.$filename;
+        $file = $path.'/'.$filename;
 
         $cmd = sprintf(
-            'mysqldump -h %s -u %s -p%s -P %s %s > %s',
+            'mysqldump -q -h %s -u %s -p%s -P %s %s > %s',
             $host,
             $user,
             $password,
@@ -48,13 +52,22 @@ class DatabaseBackup
             $name,
             $file
         );
-        $process = Process::fromShellCommandline($cmd);
-        $output->writeln('[DB Dump] Starting');
-        $process->run();
+
+        return Process::fromShellCommandline($cmd);
+    }
+
+    public function execute(OutputInterface $output): void
+    {
+        $path = $this->temporaryDirectory;
+        $filename = time().'_dump.sql';
+
+        $process = $this->getProcess($path, $filename);
+        $process->mustRun();
         if ($process->isSuccessful()) {
             $output->writeln('[DB Dump] Copying dump to target');
+            $handle = fopen($path . '/' . $filename, 'rb');
             /** @noinspection PhpUnhandledExceptionInspection */
-            $this->targetFs->write('dbdump/'.$filename, file_get_contents($file));
+            $this->targetFs->writeStream('dbdump/'.$filename, $handle);
             $output->writeln('[DB Dump] Done');
         }
 
