@@ -31,7 +31,7 @@ services:
 
     App\DatabaseBackup:
         $targetFs: '@bu_source_fs'
-        $temporaryDirectory: '%kernel.cache_dir%/dbbackup'
+        $temporaryDirectory: '%kernel.cache_dir%'
 
     App\Backup:
         $source: '@bu_source_fs'
