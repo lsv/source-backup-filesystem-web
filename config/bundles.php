@@ -8,4 +8,5 @@ return [
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
     Twig\Inky\Bundle\TwigInkyBundle::class => ['all' => true],
     Twig\CssInliner\Bundle\TwigCssInlinerBundle::class => ['all' => true],
+    Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
 ];
